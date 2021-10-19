@@ -15,12 +15,12 @@ describe('Calculate electric field correctly', () => {
 
   test('one point charge', () => {
     const testCharge = getPointCharge('Test Charge') as TestCharge;
-    const pointCharge = getPointCharge('Charge 1', 1, getVector(1, 1));
+    const pointCharge = getPointCharge('Charge 1', 1, getVector(0, 1));
 
     const electricField = getElectricField([pointCharge], testCharge);
     
-    expect(electricField.x).toBe(3181980515.3394628);
-    expect(electricField.y).toBe(3181980515.3394628);
+    expect(electricField.x).toBe(0);
+    expect(electricField.y).toBe(9e9);
   });
 
   test('three point charges', () => {
@@ -58,12 +58,12 @@ describe('Calculate electric force correctly', () => {
 
   test('one point charge', () => {
     const testCharge = getPointCharge('Test Charge', 2) as TestCharge;
-    const pointCharge = getPointCharge('Charge 1', 1, getVector(1, 1));
+    const pointCharge = getPointCharge('Charge 1', 1, getVector(0, 1));
 
     const electricForce = getElectricForce([pointCharge], testCharge);
     
-    expect(electricForce.x).toBe(6363961030.6789255);
-    expect(electricForce.y).toBe(6363961030.6789255);
+    expect(electricForce.x).toBe(0);
+    expect(electricForce.y).toBe(18e9);
   });
 
   test('three point charges', () => {

@@ -1,4 +1,12 @@
-import { Vector, addVector, getUnitVector, getVector, getVectorDistance, scalarMultiplyVector } from './vector'
+import {
+  Vector,
+  addVector,
+  getUnitVector,
+  getVector,
+  getVectorDistance,
+  isSameVector,
+  scalarMultiplyVector,
+} from './vector';
 
 export type Optional<T> = T | null;
 
@@ -23,34 +31,55 @@ export const K = 9e9;
  * @param position vector represents position of the point charge
  * @returns point charge
  */
-export const getPointCharge = (name: string, q = 1, position = getVector()) => ({ name, q, position }) as PointCharge;
-export type PointCharge = { name: string, q: number, position: Vector };
-export type TestCharge = { name: 'Test Charge', q: number, position: Vector };
+export const getPointCharge = (name: string, q = 1, position = getVector()) => ({ name, q, position } as PointCharge);
+export type PointCharge = { name: string; q: number; position: Vector };
+export type TestCharge = { name: 'Test Charge'; q: number; position: Vector };
 
 /**
  * @param pointCharges array of point charges
  * @param testCharge test charge
  * @returns coefficient of N of electric field due to point charges at test charge position
  */
-export const getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) => pointCharges.filter(pointCharge => pointCharge.position.x !== testCharge.position.x && pointCharge.position.y !== testCharge.position.y).reduce((electricField, pointCharge) => addVector(scalarMultiplyVector(K * pointCharge.q / Math.pow(getVectorDistance(pointCharge.position, testCharge.position), 2), getUnitVector(pointCharge.position)), electricField), getVector());
+const _getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) =>
+  pointCharges
+    .filter((pointCharge) => !isSameVector(pointCharge.position, testCharge.position))
+    .reduce(
+      (electricField, pointCharge) =>
+        addVector(
+          scalarMultiplyVector(
+            (K * pointCharge.q) / Math.pow(getVectorDistance(pointCharge.position, testCharge.position), 2),
+            getUnitVector(pointCharge.position),
+          ),
+          electricField,
+        ),
+      getVector(),
+    );
+export const getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) =>
+  Number.isNaN(_getElectricField(pointCharges, testCharge).x) ||
+  Number.isNaN(_getElectricField(pointCharges, testCharge).y)
+    ? getVector()
+    : _getElectricField(pointCharges, testCharge);
 
 /**
  * @param pointCharges array of point charges
  * @param testCharge test charge
  * @returns electric field due to point charges at test charge position
  */
-export const getElectricFieldMultiplyByN = (pointCharges: PointCharge[], testCharge: TestCharge) => scalarMultiplyVector(N, getElectricField(pointCharges, testCharge));
+export const getElectricFieldMultiplyByN = (pointCharges: PointCharge[], testCharge: TestCharge) =>
+  scalarMultiplyVector(N, getElectricField(pointCharges, testCharge));
 
 /**
  * @param pointCharges array of point charges
  * @param testCharge test charge
  * @returns coefficient of N of electric force due to point charges to a test charge
  */
-export const getElectricForce = (pointCharges: PointCharge[], testCharge: TestCharge) => scalarMultiplyVector(testCharge.q, getElectricField(pointCharges, testCharge));
+export const getElectricForce = (pointCharges: PointCharge[], testCharge: TestCharge) =>
+  scalarMultiplyVector(testCharge.q, getElectricField(pointCharges, testCharge));
 
 /**
  * @param pointCharges array of point charges
  * @param testCharge test charge
  * @returns coefficient of N of electric force due to point charges to a test charge
  */
-export const getElectricForceMultiplyByN = (pointCharges: PointCharge[], testCharge: TestCharge) => scalarMultiplyVector(N, getElectricForce(pointCharges, testCharge));
+export const getElectricForceMultiplyByN = (pointCharges: PointCharge[], testCharge: TestCharge) =>
+  scalarMultiplyVector(N, getElectricForce(pointCharges, testCharge));
