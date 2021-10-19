@@ -82,4 +82,4 @@ export const getElectricForce = (pointCharges: PointCharge[], testCharge: TestCh
  * @returns coefficient of N of electric force due to point charges to a test charge
  */
 export const getElectricForceMultiplyByN = (pointCharges: PointCharge[], testCharge: TestCharge) =>
-  scalarMultiplyVector(N, getElectricForce(pointCharges, testCharge));
+  scalarMultiplyVector(N, getElectricFieldMultiplyByN(pointCharges, testCharge));
