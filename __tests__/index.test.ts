@@ -34,6 +34,15 @@ describe('Calculate electric field correctly', () => {
     expect(electricField.x).toBe(5833630944.789016);
     expect(electricField.y).toBe(5833630944.789016);
   });
+
+  test('electric field should be zero when it is at the same position as test charge', () => {
+    const testCharge = getPointCharge('Test Charge') as TestCharge;
+    const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 0));
+    const electricField = getElectricField([pointCharge1], testCharge);
+    
+    expect(electricField.x).toBe(0);
+    expect(electricField.y).toBe(0);
+  });
 });
 
 describe('Calculate electric force correctly', () => {
@@ -67,5 +76,14 @@ describe('Calculate electric force correctly', () => {
     
     expect(electricForce.x).toBe(11667261889.578032);
     expect(electricForce.y).toBe(11667261889.578032);
+  });
+
+  test('electric force should be zero when it is at the same position as test charge', () => {
+    const testCharge = getPointCharge('Test Charge') as TestCharge;
+    const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 0));
+    const electricField = getElectricForce([pointCharge1], testCharge);
+    
+    expect(electricField.x).toBe(0);
+    expect(electricField.y).toBe(0);
   });
 });
