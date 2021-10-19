@@ -1,6 +1,6 @@
 {
   "name": "cs-zeus",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A package aim to provide simple constants and functions to support Physics calculation in electric related topics.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
