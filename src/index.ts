@@ -40,25 +40,29 @@ export type TestCharge = { name: 'Test Charge'; q: number; position: Vector };
  * @param testCharge test charge
  * @returns coefficient of N of electric field due to point charges at test charge position
  */
-const _getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) =>
-  pointCharges
-    .filter((pointCharge) => !isSameVector(pointCharge.position, testCharge.position))
+export const getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) => {
+  const samePositionToTestChargeNameList = pointCharges.filter(pointCharge => pointCharge.position.x === testCharge.position.x && pointCharge.position.y === testCharge.position.y).map(pointCharge => pointCharge.name);
+
+  return pointCharges
+    .filter(
+      (pointCharge) => !samePositionToTestChargeNameList.find(pc => pc === pointCharge.name)
+    )
     .reduce(
       (electricField, pointCharge) =>
         addVector(
           scalarMultiplyVector(
-            (K * pointCharge.q) / Math.pow(getVectorDistance(pointCharge.position, testCharge.position), 2),
-            getUnitVector(pointCharge.position),
+            (K * pointCharge.q) /
+            Math.pow(
+              getVectorDistance(pointCharge.position, testCharge.position),
+              2
+            ),
+            getUnitVector(pointCharge.position)
           ),
-          electricField,
+          electricField
         ),
-      getVector(),
+      getVector()
     );
-export const getElectricField = (pointCharges: PointCharge[], testCharge: TestCharge) =>
-  Number.isNaN(_getElectricField(pointCharges, testCharge).x) ||
-  Number.isNaN(_getElectricField(pointCharges, testCharge).y)
-    ? getVector()
-    : _getElectricField(pointCharges, testCharge);
+};
 
 /**
  * @param pointCharges array of point charges

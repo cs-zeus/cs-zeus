@@ -44,16 +44,26 @@ describe('Calculate electric field correctly', () => {
     expect(electricField.y).toBe(0);
   });
 
+  test('electric field should be zero when it is at the same position as test charge - multiple charges', () => {
+    const testCharge = getPointCharge('Test Charge') as TestCharge;
+    const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 0));
+    const pointCharge2 = getPointCharge('Charge 2', 1, getVector(0, 1));
+    const electricField = getElectricField([pointCharge1, pointCharge2], testCharge);
+
+    expect(electricField.x).toBe(0);
+    expect(electricField.y).toBe(9e9);
+  });
+
   test('multiply by N - three point charges', () => {
     const testCharge = getPointCharge('Test Charge') as TestCharge;
     const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 1));
     const pointCharge2 = getPointCharge('Charge 2', 2, getVector(1, 0));
-    const pointCharge3 = getPointCharge('Charge 3', 3, getVector(1, 1));
+    const pointCharge3 = getPointCharge('Charge 3', 3, getVector(0, 0));
 
     const electricField = getElectricFieldMultiplyByN([pointCharge1, pointCharge2, pointCharge3], testCharge);
 
-    expect(electricField.x).toBe(4.412859835672145e-9);
-    expect(electricField.y).toBe(2.9710598356721455e-9);
+    expect(electricField.x).toBe(2.8836e-9);
+    expect(electricField.y).toBe(1.4418e-9);
   });
 });
 
@@ -99,15 +109,25 @@ describe('Calculate electric force correctly', () => {
     expect(electricField.y).toBe(0);
   });
 
+  test('electric force should be zero when it is at the same position as test charge - multiple charges', () => {
+    const testCharge = getPointCharge('Test Charge') as TestCharge;
+    const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 0));
+    const pointCharge2 = getPointCharge('Charge 2', 1, getVector(0, 1));
+    const electricField = getElectricForce([pointCharge1, pointCharge2], testCharge);
+
+    expect(electricField.x).toBe(0);
+    expect(electricField.y).toBe(9e9);
+  });
+
   test('multiply by N - three point charges', () => {
     const testCharge = getPointCharge('Test Charge') as TestCharge;
     const pointCharge1 = getPointCharge('Charge 1', 1, getVector(0, 1));
     const pointCharge2 = getPointCharge('Charge 2', 2, getVector(1, 0));
-    const pointCharge3 = getPointCharge('Charge 3', 3, getVector(1, 1));
+    const pointCharge3 = getPointCharge('Charge 3', 3, getVector(0, 0));
 
     const electricField = getElectricForceMultiplyByN([pointCharge1, pointCharge2, pointCharge3], testCharge);
 
-    expect(electricField.x).toBe(7.069401456746777e-28);
-    expect(electricField.y).toBe(4.759637856746777e-28);
+    expect(electricField.x).toBe(4.619527199999999e-28);
+    expect(electricField.y).toBe(2.3097635999999997e-28);
   });
 });
